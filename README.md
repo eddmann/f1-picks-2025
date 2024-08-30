@@ -1,5 +1,12 @@
 # 🏁 F1 Picks
 
+_4-hours to build an F1 picks game, it's lights out and away we go!_ 🏎️ 💨
+
+<p>
+  <img src="./README/home.png" width="49%" />
+  <img src="./README/round.png" width="49%" /> 
+</p>
+
 My family and I have been playing a game for the past couple of rounds of this Formula 1 (2024) season.
 The game is to predict the top three drivers per race, where after each race picks are scored - 2 points for the correct driver and position, 1 point for the correct driver.
 We have been sending these picks over Whatsapp and then tallying up the scores manually.
@@ -17,11 +24,11 @@ After the 4-hour window I had:
 - Working user authentication via Google social login.
 - Ability to record picks for a given round race (type), based on a specified pick window.
 - Ability for select users (based on role) to record the race (type) results, upon which an asynchronous job is dispatched to update the relevant pick scores.
-- Serverless deployment to Lambda, using [Bref](https://bref.sh/), [Serverless Lift](https://www.serverless.com/plugins/serverless-lift) (for handling SQS and CloudFront concerns) and [Neon](https://neon.tech/). 
+- Serverless deployment to Lambda, using [Bref](https://bref.sh/), [Serverless Lift](https://www.serverless.com/plugins/serverless-lift) (for handling SQS and CloudFront concerns) and [Neon](https://neon.tech/).
 - Domain logic spread across many different layers 😬, but it works!
 
 Since this 4-hour stint I have:
 
 - Restructured the repository structure to seperate local Docker and application concerns.
 - Added a custom domain, instead of access via the CloudFront distribution URL.
-- Extracted the custom __stage__ (staging, production) parameters into seperate `serverless.params.yml` file.
+- Extracted the custom **stage** (staging, production) parameters into seperate `serverless.params.yml` file.
