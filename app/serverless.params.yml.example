@@ -1,0 +1,13 @@
+stage: prod
+domain: domain.com
+certificate: arn:aws:acm:us-east-1:123456:certificate/123456
+app:
+    key: 'base64:/EStlF5sExBpWdQ3eB/h+F2zzKGDc5bvDzwe0KD8ZPg='
+    db:
+        host: host
+        database: database
+        username: username
+        password: password
+    google:
+        client_id: client_id
+        client_secret: client_secret

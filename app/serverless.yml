@@ -1,0 +1,72 @@
+service: f1-picks
+
+custom:
+    stage: ${file(./serverless.params.yml):stage}
+    domain: ${file(./serverless.params.yml):domain}
+    certificate: ${file(./serverless.params.yml):certificate}
+    app: ${file(./serverless.params.yml):app}
+
+provider:
+    name: aws
+    region: eu-west-1
+    stage: ${self:custom.stage}
+    environment:
+        APP_ENV: production
+        APP_KEY: ${self:custom.app.key}
+        APP_DEBUG: false
+        APP_URL: https://${self:custom.domain}
+
+        DB_CONNECTION: pgsql
+        DB_HOST: ${self:custom.app.db.host}
+        DB_PORT: 5432
+        DB_DATABASE: ${self:custom.app.db.database}
+        DB_USERNAME: ${self:custom.app.db.username}
+        DB_PASSWORD: ${self:custom.app.db.password}
+
+        QUEUE_CONNECTION: sqs
+        SQS_QUEUE: ${construct:jobs.queueUrl}
+
+        SESSION_DRIVER: database
+        SESSION_LIFETIME: 120
+        SESSION_ENCRYPT: false
+        SESSION_PATH: /
+        SESSION_DOMAIN: ${self:custom.domain}
+
+        GOOGLE_CLIENT_ID: ${self:custom.app.google.client_id}
+        GOOGLE_CLIENT_SECRET: ${self:custom.app.google.client_secret}
+        GOOGLE_REDIRECT_URL: https://${self:custom.domain}/auth/callback
+
+package:
+    patterns:
+        - '!node_modules/**'
+        - '!storage/**'
+        - '!tests/**'
+
+functions:
+    web:
+        handler: public/index.php
+        runtime: php-83-fpm
+        timeout: 28
+        events:
+            - httpApi: '*'
+
+    artisan:
+        handler: artisan
+        runtime: php-83-console
+        timeout: 720
+
+constructs:
+    website:
+        type: server-side-website
+        domain: ${self:custom.domain}
+        certificate: ${self:custom.certificate}
+    jobs:
+        type: queue
+        worker:
+            handler: Bref\LaravelBridge\Queue\QueueHandler
+            runtime: php-83
+            timeout: 60
+
+plugins:
+  - ./vendor/bref/bref
+  - serverless-lift
