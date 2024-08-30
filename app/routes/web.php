@@ -17,7 +17,7 @@ Route::get('/auth/callback', function () {
     $user = User::updateOrCreate([
         'email' => $identity->getEmail(),
     ], [
-        'name' => $identity->getName(),
+        'name' => explode(' ', $identity->getName())[0],
         'password' => 'irrelevant_password',
     ]);
 
