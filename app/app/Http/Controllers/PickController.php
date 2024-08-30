@@ -17,7 +17,7 @@ class PickController
         }
 
         $drivers = Driver::all();
-        $pick = Pick::where(['user_id' => auth()->id(), 'type' => $type])->first();
+        $pick = Pick::where(['user_id' => auth()->id(), 'round_id' => $round->id, 'type' => $type])->first();
 
         return view('picks.create', compact('round', 'type', 'drivers', 'pick'));
     }
