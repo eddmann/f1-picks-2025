@@ -9,8 +9,9 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            DriverSeeder::class,
-            RoundSeeder::class,
+            // 2025 calendar added using migration
+            // DriverSeeder::class,
+            // RoundSeeder::class,
         ]);
     }
 }
