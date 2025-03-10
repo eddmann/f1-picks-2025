@@ -53,7 +53,7 @@
                 <td>{{ $score->name }}</td>
                 <td>{{ $score->score }}</td>
                 <td>
-                    <a href="{{ route('users.show', $score->id) }}">View</a>
+                    <a href="{{ route('users.show', ['user' => $score->id, 'year' => $year]) }}">View</a>
                 </td>
             </tr>
         @empty

@@ -25,10 +25,12 @@ class RoundController
             SELECT users.id, users.name, SUM(picks.score) as score
             FROM users
             INNER JOIN picks ON users.id = picks.user_id
+            INNER JOIN rounds ON picks.round_id = rounds.id
             WHERE picks.score IS NOT NULL
+            AND rounds.year = :year
             GROUP BY users.id, users.name
             ORDER BY score DESC
-        ');
+        ', compact('year'));
 
         return view('rounds.index', compact('year', 'years', 'rounds', 'scores'));
     }
