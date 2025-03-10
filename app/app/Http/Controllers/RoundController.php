@@ -54,10 +54,10 @@ class RoundController
                     'isOpenForPicks' => auth()->id() && $round->isOpenForPicks($type),
                     'picks' => Pick::where(['round_id' => $round->id, 'type' => $type->value])->orderBy('score', 'desc')->get(),
                     'result' => Result::where(['round_id' => $round->id, 'type' => $type->value])->first(),
-                ]
+                ],
             ];
         }, []);
 
-        return view('rounds.show', compact('round',  'score', 'types'));
+        return view('rounds.show', compact('round', 'score', 'types'));
     }
 }

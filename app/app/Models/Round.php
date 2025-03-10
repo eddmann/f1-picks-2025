@@ -11,7 +11,7 @@ class Round extends Model
     protected $fillable = [
         'year', 'round', 'name',
         'sprint_qualifying_at', 'sprint_race_at',
-        'race_qualifying_at', 'race_at'
+        'race_qualifying_at', 'race_at',
     ];
 
     public function isOpenForPicks(Type $type): bool
