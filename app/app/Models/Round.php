@@ -72,9 +72,9 @@ class Round extends Model
         return CarbonPeriod::between($this->race_at->sub('1 day'), $this->race_at->sub('5 minutes'));
     }
 
-    private function isSprintWeekend(): bool
+    public function isSprintWeekend(): bool
     {
-        return $this->sprint_qualifying_at !== null && $this->sprint_race_at;
+        return $this->sprint_qualifying_at && $this->sprint_race_at;
     }
 
     public function picks()
