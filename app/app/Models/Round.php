@@ -59,21 +59,17 @@ class Round extends Model
             return null;
         }
 
-        return CarbonPeriod::between($this->sprint_qualifying_at->add('1 hour'), $this->sprint_race_at->sub('5 minutes'));
+        return CarbonPeriod::between($this->sprint_race_at->sub('1 day'), $this->sprint_race_at->sub('5 minutes'));
     }
 
     private function getRaceQualifyingPickWindow(): CarbonPeriod
     {
-        if ($this->isSprintWeekend()) {
-            return CarbonPeriod::between($this->sprint_race_at->add('1 hour'), $this->race_qualifying_at->sub('5 minutes'));
-        }
-
         return CarbonPeriod::between($this->race_qualifying_at->sub('1 day'), $this->race_qualifying_at->sub('5 minutes'));
     }
 
     private function getRacePickWindow(): CarbonPeriod
     {
-        return CarbonPeriod::between($this->race_qualifying_at->add('1 hour'), $this->race_at->sub('5 minutes'));
+        return CarbonPeriod::between($this->race_at->sub('1 day'), $this->race_at->sub('5 minutes'));
     }
 
     private function isSprintWeekend(): bool
