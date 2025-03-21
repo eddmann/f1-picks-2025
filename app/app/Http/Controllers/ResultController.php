@@ -16,7 +16,7 @@ class ResultController extends Controller
     public function create()
     {
         $rounds = Round::all();
-        $drivers = Driver::all();
+        $drivers = Driver::orderBy('name', 'asc')->get();
 
         return view('results.create', compact('rounds', 'drivers'));
     }

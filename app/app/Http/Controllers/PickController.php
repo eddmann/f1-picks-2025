@@ -16,7 +16,7 @@ class PickController
             return back()->withErrors(['error' => "Round is not open for {$type->title()} picks"]);
         }
 
-        $drivers = Driver::all();
+        $drivers = Driver::orderBy('name', 'asc')->get();
         $pick = Pick::where(['user_id' => auth()->id(), 'round_id' => $round->id, 'type' => $type])->first();
 
         return view('picks.create', compact('round', 'type', 'drivers', 'pick'));
