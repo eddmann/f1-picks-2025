@@ -28,7 +28,13 @@
             @forelse($type['picks'] as $pick)
                 <tr>
                     <td>{{ $pick->user->name }}</td>
-                    <td>{{ implode(', ', array_map(fn ($driver) => $driver->name, $pick->drivers())) }}</td>
+                    <td>
+                        @if(!$type['isOpenForPicks'])
+                            {{ implode(', ', array_map(fn ($driver) => $driver->name, $pick->drivers())) }}
+                        @else
+                            ...
+                        @endif
+                    </td>
                     <td>{{ $pick->score }}</td>
                 </tr>
             @empty
