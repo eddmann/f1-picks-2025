@@ -29,10 +29,10 @@
                 <tr>
                     <td>{{ $pick->user->name }}</td>
                     <td>
-                        @if(!$type['isOpenForPicks'])
-                            {{ implode(', ', array_map(fn ($driver) => $driver->name, $pick->drivers())) }}
-                        @else
+                        @if ($pick->isOpen())
                             ...
+                        @else
+                            {{ implode(', ', array_map(fn ($driver) => $driver->name, $pick->drivers())) }}
                         @endif
                     </td>
                     <td>{{ $pick->score }}</td>

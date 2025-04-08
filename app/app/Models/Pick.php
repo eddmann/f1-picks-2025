@@ -60,6 +60,11 @@ class Pick extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function isOpen(): bool
+    {
+        return $this->round()->first()->isOpenForPicks($this->type);
+    }
+
     protected function casts(): array
     {
         return [

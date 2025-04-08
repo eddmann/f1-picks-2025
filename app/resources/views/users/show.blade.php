@@ -27,7 +27,13 @@
             @foreach($picksForRound as $pick)
                 <tr>
                     <td>{{ $pick->type->title() }}</td>
-                    <td>{{ implode(', ', array_map(fn ($driver) => $driver->name, $pick->drivers())) }}</td>
+                    <td>
+                        @if ($pick->isOpen())
+                            ...
+                        @else
+                            {{ implode(', ', array_map(fn ($driver) => $driver->name, $pick->drivers())) }}
+                        @endif
+                    </td>
                     <td>{{ $pick->score }}</td>
                 </tr>
             @endforeach
