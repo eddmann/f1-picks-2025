@@ -12,6 +12,7 @@ class DatabaseSeeder extends Seeder
             // 2025 calendar added using migration
             // DriverSeeder::class,
             // RoundSeeder::class,
+            UserSeeder::class,
         ]);
     }
 }

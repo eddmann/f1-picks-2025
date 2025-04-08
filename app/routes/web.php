@@ -53,3 +53,13 @@ Route::controller(ResultController::class)
         Route::get('/', 'create')->name('results.create');
         Route::post('/', 'store')->name('results.store');
     });
+
+if (app()->environment('development')) {
+    Route::get('/dev/login/{email}', function (string $email) {
+        $user = User::where('email', $email)->firstOrFail();
+
+        Auth::login($user);
+
+        return redirect('/');
+    });
+}
