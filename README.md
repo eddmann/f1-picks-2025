@@ -1,34 +1,59 @@
-# 🏁 F1 Picks
+# 🏁 F1 Picks (2025 edition)
 
-_4-hours to build an F1 picks game, it's lights out and away we go!_ 🏎️ 💨
+_4-hours to improve an F1 picks game, it's lights out and away we go!_ 🏎️ 💨
 
 <p>
-  <img src="./README/home.png" width="49%" />
-  <img src="./README/round.png" width="49%" /> 
+  <img src="./README/mobile-home.png" width="49%" />
+  <img src="./README/mobile-round.png" width="49%" />
 </p>
 
-My family and I have been playing a game for the past couple of rounds of this Formula 1 (2024) season.
-The game is to predict the top three drivers per race, where after each race picks are scored - 2 points for the correct driver and position, 1 point for the correct driver.
-We have been sending these picks over Whatsapp and then tallying up the scores manually.
+### Desktop
 
-Before the Formula 1 season summer-break had ended I wanted to see how quickly I could build something which allowed us to share and score these picks online.
-I time-boxed 4 hours the Friday night before qualifying of the [Dutch Grand Prix](https://www.formula1.com/en/racing/2024/netherlands) to see how far I could get with the build.
-With this time constraint I decided to use [Laravel](https://laravel.com/) for rapid-application development and a whole lotta ChatGPT to help build out the application behaviour.
-From the initial ChatGPT prompt that helped me get the basic structure of the application setup I used a [small script](https://github.com/mufeedvh/code2prompt) which allowed me to feed in the current source-code to the prompt to help iterate on the solution and add additional behaviour.
-After a lot of back n' forth with ChatGPT and a bunch of manual development I was able to ship a working application just past the 4-hour window!
+<p>
+  <img src="./README/desktop-home.png" width="49%" />
+  <img src="./README/desktop-round.png" width="49%" />
+</p>
 
-After the 4-hour window I had:
+## Background
 
-- Local development environment working with Docker.
-- Classless styling using [new.css](https://newcss.net/).
-- Working user authentication via Google social login.
-- Ability to record picks for a given round race (type), based on a specified pick window.
-- Ability for select users (based on role) to record the race (type) results, upon which an asynchronous job is dispatched to update the relevant pick scores.
-- Serverless deployment to Lambda, using [Bref](https://bref.sh/), [Serverless Lift](https://www.serverless.com/plugins/serverless-lift) (for handling SQS and CloudFront concerns) and [Neon](https://neon.tech/).
-- Domain logic spread across many different layers 😬, but it works!
+Last year, just before the 2024 Dutch Grand Prix, I put together a quick 4-hour sprint project: [F1 Picks](https://github.com/eddmann/f1-picks), a simple web-based game where my family could predict race outcomes.
+The game was straightforward:
 
-Since this 4-hour stint I have:
+> Each player predicts the top three finishers in a Grand Prix.
+> Scoring is awarded as follows:
+>
+> - 2 points for the correct driver in the correct position.
+> - 1 point for the correct driver, wrong position.
 
-- Restructured the repository structure to seperate local Docker and application concerns.
-- Added a custom domain, instead of access via the CloudFront distribution URL.
-- Extracted the custom **stage** (staging, production) parameters into seperate `serverless.params.yml` file.
+It turned into a fun family tradition.
+Despite some rough edges in the original build - both in aesthetics and workflow - we continued to play throughout that season and into the first half of this one.
+
+However, since building the initial version, AI tooling has advanced significantly.
+Integrated agentic workflows - such as Cursor and Claude Code - along with the introduction of MCP and models like GPT-5, have completely eliminated the need for my previous manual [code2prompt](https://github.com/mufeedvh/code2prompt)/ChatGPT routine 🎉.
+With the launch of [Laravel Boost](https://boost.laravel.com/), I was also keen to explore how well it could enforce project-specific rules in a real-world scenario.
+
+So, once again, I challenged myself: another **4-hour sprint before the [Dutch GP](https://www.formula1.com/en/racing/2025/netherlands) qualifying**. The goal?
+
+- Spend some more time with Cursor and GPT-5.
+- Give the site a F1 themed makeover.
+- Improve the game's features and usability.
+- Add meaningful test coverage to keep changes safe and predictable.
+
+## Improvements
+
+Here's what I achieved in this sprint:
+
+- Dependencies
+  - Upgraded to Laravel 12 and PHP 8.4.
+  - Integrated Laravel Boost with tailored [project rules](./app/.ai/guidelines/project.blade.php), actively used by Cursor.
+- Testing
+  - Comprehensive test coverage now documents and verifies all key behaviours of the system.
+  - This ensures ongoing stability and keeps LLM-driven changes consistently aligned with the intended behaviour.
+- Styling
+  - Replaced `new.css` with Tailwind CSS, introducing a F1-inspired theme and fully responsive design for both [mobile and desktop](./README).
+  - Added a new F1 Picks logo generated with ChatGPT.
+- Features
+  - Defaults homepage to the current rounds paginated listing.
+  - Ability to mark drivers as inactive/unavailable.
+  - Auto-selects the current round for results entry.
+  - Hides sprint option from results entry unless it's a sprint weekend.
