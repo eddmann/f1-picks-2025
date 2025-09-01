@@ -7,6 +7,7 @@ use App\Models\Result;
 use App\Models\Round;
 use App\Models\Type;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
 
 class RoundController
@@ -16,10 +17,40 @@ class RoundController
         $year = $request->input('year') ?: date('Y');
         $years = Round::groupBy('year')->pluck('year');
 
+        $now = now();
+
+        // Determine the active round: the next upcoming race in the selected year,
+        // or the last round if the season has finished.
+        $activeRound = Round::where('year', $year)
+            ->where('race_at', '>=', $now)
+            ->orderBy('race_at', 'asc')
+            ->first();
+
+        if (! $activeRound) {
+            $activeRound = Round::where('year', $year)
+                ->orderBy('round', 'desc')
+                ->first();
+        }
+
+        // If no explicit page is provided, default the pagination to the page that
+        // contains the active round.
+        if (! $request->has('round_page') && $activeRound) {
+            $perPage = 5;
+            $position = Round::where('year', $year)
+                ->where('round', '<=', $activeRound->round)
+                ->count();
+            $defaultPage = max(1, (int) ceil($position / $perPage));
+
+            Paginator::currentPageResolver(function (string $pageName) use ($defaultPage) {
+                return $pageName === 'round_page' ? $defaultPage : null;
+            });
+        }
+
         $rounds = Round::orderBy('year', 'desc')
             ->where('year', $year)
             ->orderBy('round', 'asc')
-            ->simplePaginate(5, pageName: 'round_page');
+            ->simplePaginate(5, pageName: 'round_page')
+            ->withQueryString();
 
         $scores = DB::select('
             SELECT users.id, users.name, SUM(picks.score) as score
@@ -32,7 +63,9 @@ class RoundController
             ORDER BY score DESC
         ', compact('year'));
 
-        return view('rounds.index', compact('year', 'years', 'rounds', 'scores'));
+        $activeRoundId = $activeRound?->getKey();
+
+        return view('rounds.index', compact('year', 'years', 'rounds', 'scores', 'activeRoundId'));
     }
 
     public function show(Round $round)

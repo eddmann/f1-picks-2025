@@ -1,4 +1,5 @@
 service: f1-picks
+frameworkVersion: ^3.40.0
 
 custom:
     stage: ${file(./serverless.params.yml):stage}
@@ -45,14 +46,14 @@ package:
 functions:
     web:
         handler: public/index.php
-        runtime: php-83-fpm
+        runtime: php-84-fpm
         timeout: 28
         events:
             - httpApi: '*'
 
     artisan:
         handler: artisan
-        runtime: php-83-console
+        runtime: php-84-console
         timeout: 720
 
 constructs:
@@ -64,7 +65,7 @@ constructs:
         type: queue
         worker:
             handler: Bref\LaravelBridge\Queue\QueueHandler
-            runtime: php-83
+            runtime: php-84
             timeout: 60
 
 plugins:

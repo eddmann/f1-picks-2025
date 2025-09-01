@@ -4,10 +4,13 @@ namespace App\Models;
 
 use Carbon\CarbonImmutable;
 use Carbon\CarbonPeriod;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Round extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'year', 'round', 'name',
         'sprint_qualifying_at', 'sprint_race_at',

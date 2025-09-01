@@ -17,9 +17,16 @@ class UserController
             ->with('round')
             ->join('rounds', 'rounds.id', '=', 'picks.round_id')
             ->where('year', $year)
+            ->orderBy('rounds.round')
             ->get()
             ->groupBy(fn ($pick) => $pick->name);
 
-        return view('users.show', compact('user', 'year', 'years', 'picks'));
+        $totalScore = (int) $user->picks()
+            ->join('rounds', 'rounds.id', '=', 'picks.round_id')
+            ->where('year', $year)
+            ->whereNotNull('score')
+            ->sum('score');
+
+        return view('users.show', compact('user', 'year', 'years', 'picks', 'totalScore'));
     }
 }

@@ -16,7 +16,7 @@ class PickController
             return back()->withErrors(['error' => "Round is not open for {$type->title()} picks"]);
         }
 
-        $drivers = Driver::orderBy('name', 'asc')->get();
+        $drivers = Driver::where('active', true)->orderBy('name', 'asc')->get();
         $pick = Pick::where(['user_id' => auth()->id(), 'round_id' => $round->id, 'type' => $type])->first();
 
         return view('picks.create', compact('round', 'type', 'drivers', 'pick'));
@@ -29,9 +29,21 @@ class PickController
         }
 
         $request->validate([
-            'driver1_id' => 'required|exists:drivers,id',
-            'driver2_id' => 'required|exists:drivers,id',
-            'driver3_id' => 'required|exists:drivers,id',
+            'driver1_id' => ['required', 'exists:drivers,id', function ($attribute, $value, $fail) {
+                if (! Driver::where('id', $value)->where('active', true)->exists()) {
+                    $fail('Selected driver is not active.');
+                }
+            }],
+            'driver2_id' => ['required', 'exists:drivers,id', function ($attribute, $value, $fail) {
+                if (! Driver::where('id', $value)->where('active', true)->exists()) {
+                    $fail('Selected driver is not active.');
+                }
+            }],
+            'driver3_id' => ['required', 'exists:drivers,id', function ($attribute, $value, $fail) {
+                if (! Driver::where('id', $value)->where('active', true)->exists()) {
+                    $fail('Selected driver is not active.');
+                }
+            }],
         ]);
 
         $driverIds = [$request->input('driver1_id'), $request->input('driver2_id'), $request->input('driver3_id')];

@@ -16,9 +16,24 @@ class ResultController extends Controller
     public function create()
     {
         $rounds = Round::all();
-        $drivers = Driver::orderBy('name', 'asc')->get();
+        $drivers = Driver::where('active', true)->orderBy('name', 'asc')->get();
 
-        return view('results.create', compact('rounds', 'drivers'));
+        $now = now();
+        $year = (int) date('Y');
+        $activeRound = Round::where('year', $year)
+            ->where('race_at', '>=', $now)
+            ->orderBy('race_at', 'asc')
+            ->first();
+
+        if (! $activeRound) {
+            $activeRound = Round::where('year', $year)
+                ->orderBy('round', 'desc')
+                ->first();
+        }
+
+        $activeRoundId = $activeRound?->getKey();
+
+        return view('results.create', compact('rounds', 'drivers', 'activeRoundId'));
     }
 
     public function store(Request $request)

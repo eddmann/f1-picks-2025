@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DriverController;
 use App\Http\Controllers\PickController;
 use App\Http\Controllers\ResultController;
 use App\Http\Controllers\RoundController;
@@ -47,11 +48,19 @@ Route::controller(PickController::class)
     });
 
 Route::controller(ResultController::class)
-    ->middleware(['can:publish,App\Model\Result'])
+    ->middleware(['can:publish,App\\Models\\Result'])
     ->prefix('/results')
     ->group(function () {
         Route::get('/', 'create')->name('results.create');
         Route::post('/', 'store')->name('results.store');
+    });
+
+Route::controller(DriverController::class)
+    ->middleware(['can:publish,App\\Models\\Result'])
+    ->prefix('/drivers')
+    ->group(function () {
+        Route::get('/', 'index')->name('drivers.index');
+        Route::post('/', 'update')->name('drivers.update');
     });
 
 if (app()->environment('development')) {
